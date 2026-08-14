@@ -1,0 +1,81 @@
+{
+  "@@locale": "en",
+  "skip": "Skip",
+  "continueText": "Continue",
+  "academicSupportTitle": "Academic Support When You Need It",
+  "academicSupportDescription": "Connect with experts and get academic guidance and support to make your educational decisions with confidence",
+  "organizeStudiesTitle": "Organize Your Studies and Track Your Progress",
+  "organizeStudiesDescription": "Track your lessons, tasks, and tests in one place and monitor your progress with clear and easy steps",
+  "learnSmarterTitle": "Learn in a Smarter Way",
+  "learnSmarterDescription": "Explore organized academic content, clear lessons, and educational services that help you achieve your goals with confidence",
+  "choosePreferredLanguage": "Choose Your Preferred Language",
+  "changeLanguageLater": "You can change the language later from the settings at any time.",
+  "arabicLanguage": "Arabic",
+  "englishLanguage": "English",
+  "chooseLanguageStart": "Choose",
+  "chooseLanguageMiddle": "your language",
+  "chooseLanguageEnd": "preference",
+  "onboardingLearnSmarterTitle": "Learn Smarter",
+  "onboardingLearnSmarterHighlight": "Smarter",
+  "onboardingLearnSmarterDescription": "Explore organized academic content and clear lessons and educational services that help you achieve your goals with confidence",
+  "onboardingOrganizeStudyTitle": "Organize Your Study and Track Your Progress",
+  "onboardingOrganizeStudyHighlight": "Study",
+  "onboardingOrganizeStudyDescription": "Track your lessons, tasks, and quizzes in one place and monitor your progress with clear and easy steps",
+  "onboardingAcademicSupportTitle": "Academic Support When You Need It",
+  "onboardingAcademicSupportHighlight": "Academic",
+  "onboardingAcademicSupportDescription": "Connect with experts and get academic guidance and support to make confident educational decisions",
+  "login": "Login",
+  "welcomeBack": "Welcome Back",
+  "loginDescription": "Sign in to continue learning and access your academic services.",
+  "emailHint": "example@example.com",
+  "passwordHint": "Password",
+  "rememberMe": "Remember me",
+  "forgotPassword": "Forgot password?",
+  "createAccount": "Create Account",
+  "continueAsGuest": "Continue as Guest",
+  "somethingWentWrong": "Something went wrong. Please try again.",
+
+
+
+ 
+
+  "resetPassword": "Reset Password",
+  "resetPasswordDescription": "Enter your registered email and we will send you a code to reset your password.",
+  "sendVerificationCode": "Send Verification Code",
+
+  "verifyEmail": "Verify Your Email",
+  "verificationCodeSent": "We have sent you a 6-digit code to your email:",
+  "enterCode": "Enter the code",
+
+  "didntReceiveCode": "Didn't receive the code?",
+  "resendCode": "Resend",
+
+  "newPassword": "New Password",
+  "createNewPassword": "Create New Password",
+  "newPasswordDescription": "Choose a new and strong password to protect your account.",
+  "newPasswordHint": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "saveAndLogin": "Save & Login",
+
+  "register": "Create New Account",
+  "registerDescription": "Create your account to access courses and academic services.",
+  "fullNameHint": "Enter your full name",
+  "phoneHint": "Enter phone number",
+  "confirmPassword": "Confirm Password",
+  "agreeToTerms": "I agree to",
+  "termsAndConditions": "Terms & Conditions",
+  "alreadyHaveAccount": "Already have an account?",
+  "loginNow": "Login",
+
+
+
+  "emailValidation": "Please enter a valid email address",
+  "passwordValidation": "Please enter your password",
+  "passwordMismatch": "Passwords do not match",
+
+  "invalidCredentials": "Invalid email or password",
+  "emailNotFound": "Email address not found",
+  "emailRequired": "Please enter your email address",
+
+  "passwordChangedSuccessfully": "Password changed successfully"
+}
