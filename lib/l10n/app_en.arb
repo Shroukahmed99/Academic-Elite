@@ -34,29 +34,20 @@
   "createAccount": "Create Account",
   "continueAsGuest": "Continue as Guest",
   "somethingWentWrong": "Something went wrong. Please try again.",
-
-
-
- 
-
   "resetPassword": "Reset Password",
   "resetPasswordDescription": "Enter your registered email and we will send you a code to reset your password.",
   "sendVerificationCode": "Send Verification Code",
-
   "verifyEmail": "Verify Your Email",
   "verificationCodeSent": "We have sent you a 6-digit code to your email:",
   "enterCode": "Enter the code",
-
   "didntReceiveCode": "Didn't receive the code?",
   "resendCode": "Resend",
-
   "newPassword": "New Password",
   "createNewPassword": "Create New Password",
   "newPasswordDescription": "Choose a new and strong password to protect your account.",
   "newPasswordHint": "New Password",
   "confirmNewPassword": "Confirm New Password",
   "saveAndLogin": "Save & Login",
-
   "register": "Create New Account",
   "registerDescription": "Create your account to access courses and academic services.",
   "fullNameHint": "Enter your full name",
@@ -66,16 +57,42 @@
   "termsAndConditions": "Terms & Conditions",
   "alreadyHaveAccount": "Already have an account?",
   "loginNow": "Login",
-
-
-
   "emailValidation": "Please enter a valid email address",
   "passwordValidation": "Please enter your password",
   "passwordMismatch": "Passwords do not match",
-
   "invalidCredentials": "Invalid email or password",
   "emailNotFound": "Email address not found",
   "emailRequired": "Please enter your email address",
-
-  "passwordChangedSuccessfully": "Password changed successfully"
-}
+  "passwordChangedSuccessfully": "Password changed successfully",
+  "offline_error": "No internet connection",
+  "server_error": "Something went wrong. Please try again later",
+  "too_many_requests": "Too many requests. Please try again later",
+  "wrong_password": "Incorrect password",
+  "no_user": "No account found with these credentials",
+  "account_exists": "An account already exists with this email",
+  "weak_password": "The password is too weak",
+  "unmatched_password": "Passwords do not match",
+  "not_found": "The requested item was not found",
+   "registerSuccessTitle": "New account created successfully",
+  "registerSuccessDescription": "Your account is ready - let's start studying.",
+  "goToHome": "Go to Home",
+  
+  "confirmNewPasswordHint": "Confirm new password",
+   "otpVerification": "Email Verification",
+  "otpVerificationDescription": "Enter the verification code sent to your email to continue.",
+  "enterVerificationCode": "Enter Verification Code",
+  "verify": "Verify",
+  "enterCompleteVerificationCode": "Please enter the complete verification code",
+ 
+  "fullNameRequired": "Please enter your full name",
+  "phoneRequired": "Please enter your phone number",
+  "confirmPasswordHint": "Confirm password",
+  "confirmPasswordRequired": "Please confirm your password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "agreeTo": "I agree to",
+  "termsRequired": "You must agree to the Terms and Conditions" ,
+  "noAccount": "Don't have an account?",
+  "chooseStrongPassword": "Choose a strong password",
+  "jordan": "Jordan",
+  "england": "England",
+  "didNotReceiveCode": "Didn't receive the code?"}

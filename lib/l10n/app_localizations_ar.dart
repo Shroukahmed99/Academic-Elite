@@ -210,4 +210,95 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
+  String get offline_error => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get server_error => 'حدث خطأ ما، حاول مرة أخرى لاحقًا';
+
+  @override
+  String get too_many_requests => 'طلبات كثيرة جدًا، حاول مرة أخرى لاحقًا';
+
+  @override
+  String get wrong_password => 'كلمة المرور غير صحيحة';
+
+  @override
+  String get no_user => 'لا يوجد حساب بهذه البيانات';
+
+  @override
+  String get account_exists => 'يوجد حساب بالفعل بهذا البريد الإلكتروني';
+
+  @override
+  String get weak_password => 'كلمة المرور ضعيفة جدًا';
+
+  @override
+  String get unmatched_password => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get not_found => 'العنصر المطلوب غير موجود';
+
+  @override
+  String get registerSuccessTitle => 'تم إنشاء حساب جديد بنجاح';
+
+  @override
+  String get registerSuccessDescription => 'حسابك جاهز - لنبدأ الدراسة.';
+
+  @override
+  String get goToHome => 'الذهاب للرئيسية';
+
+  @override
+  String get confirmNewPasswordHint => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get otpVerification => 'التحقق من البريد الإلكتروني';
+
+  @override
+  String get otpVerificationDescription =>
+      'أدخل رمز التحقق المرسل إلى بريدك الإلكتروني للمتابعة.';
+
+  @override
+  String get enterVerificationCode => 'أدخل رمز التحقق';
+
+  @override
+  String get verify => 'تحقق';
+
+  @override
+  String get enterCompleteVerificationCode => 'يرجى إدخال رمز التحقق كاملاً';
+
+  @override
+  String get fullNameRequired => 'من فضلك أدخل الاسم كامل';
+
+  @override
+  String get phoneRequired => 'من فضلك أدخل رقم الهاتف';
+
+  @override
+  String get confirmPasswordHint => 'تأكيد كلمة المرور';
+
+  @override
+  String get confirmPasswordRequired => 'من فضلك أكد كلمة المرور';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get agreeTo => 'أوافق على';
+
+  @override
+  String get termsRequired => 'يجب الموافقة على الشروط والأحكام';
+
+  @override
+  String get chooseStrongPassword => 'اختر كلمة مرور جديدة وقوية لحماية حسابك.';
+
+  @override
+  String get didNotReceiveCode => 'لم تستلم الكود بعد؟';
+
+  @override
+  String get jordan => 'Jordan';
+
+  @override
+  String get england => 'England';
+
+  @override
+  String get noAccount => 'ليس لديك حساب؟';
 }

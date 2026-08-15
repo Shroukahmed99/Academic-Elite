@@ -18,9 +18,7 @@ class OnboardingNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.p16,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: AppSizes.p16),
       child: Row(
         textDirection: Directionality.of(context),
         children: [
@@ -31,13 +29,9 @@ class OnboardingNavigation extends StatelessWidget {
               onPressed: onNext,
               height: 50,
               borderRadius: 24,
-              textStyle: context.textTheme.titleMedium!.copyWith(
-                color: ColorsManager.white,
-              ),
+              textStyle: context.textTheme.labelLarge!,
               suffixIcon: Icon(
-                context.isArabic
-                    ? Icons.arrow_forward
-                    : Icons.arrow_back,
+                context.isArabic ? Icons.arrow_forward : Icons.arrow_back,
                 color: ColorsManager.white,
                 size: AppSizes.sp(20),
               ),
@@ -53,7 +47,9 @@ class OnboardingNavigation extends StatelessWidget {
               borderRadius: 24,
               borderColor: ColorsManager.font4,
               textColor: ColorsManager.font1,
-              textStyle: context.textTheme.titleSmall,
+              textStyle: context.textTheme.labelLarge!.copyWith(
+                color: ColorsManager.primary,
+              ),
             ),
           ),
         ],

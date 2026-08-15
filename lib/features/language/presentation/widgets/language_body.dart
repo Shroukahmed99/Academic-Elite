@@ -2,6 +2,7 @@ import 'package:academic_elite/config/routes/app_routes.dart';
 import 'package:academic_elite/core/components/custom_app_bar.dart';
 import 'package:academic_elite/core/components/custom_button.dart';
 import 'package:academic_elite/core/components/custom_text.dart';
+import 'package:academic_elite/core/components/curved_page_layout.dart';
 import 'package:academic_elite/core/extensions/localization_extension.dart';
 import 'package:academic_elite/core/extensions/navigation_extension.dart';
 import 'package:academic_elite/core/extensions/theme_extension.dart';
@@ -24,58 +25,46 @@ class LanguageBody extends StatelessWidget {
 
     return BlocBuilder<LanguageCubit, LanguageState>(
       builder: (context, state) {
-        return Container(
-          color: ColorsManager.primary,
-          child: Column(
+        return CurvedPageLayout(
+          scrollable: false,
+
+          header: const CustomAppBar(title: '', showBackButton: false),
+
+          bodyPadding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
+
+          body: Column(
             children: [
-              const CustomAppBar(title: '', showBackButton: false),
+              SizedBox(height: AppSizes.h(28)),
 
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(28),
-                      topRight: Radius.circular(28),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
-                    child: Column(
-                      children: [
-                        SizedBox(height: AppSizes.h(28)),
+              _buildLogo(),
 
-                        _buildLogo(),
+              SizedBox(height: AppSizes.h(24)),
 
-                        SizedBox(height: AppSizes.h(24)),
+              _buildTitle(context),
 
-                        _buildTitle(context),
+              SizedBox(height: AppSizes.h(8)),
 
-                        SizedBox(height: AppSizes.h(8)),
+              _buildDescription(context),
 
-                        _buildDescription(context),
+              SizedBox(height: AppSizes.h(20)),
 
-                        SizedBox(height: AppSizes.h(20)),
+              _buildLanguageCards(context, state),
 
-                        _buildLanguageCards(context, state),
+              const Spacer(),
 
-                        const Spacer(),
+              _buildContinueButton(context),
 
-                        _buildContinueButton(context, state),
-
-                        SizedBox(height: AppSizes.h(30)),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              SizedBox(height: AppSizes.h(30)),
             ],
           ),
         );
       },
     );
   }
+
+  // ============================================================
+  // LOGO
+  // ============================================================
 
   Widget _buildLogo() {
     return SizedBox(
@@ -84,6 +73,10 @@ class LanguageBody extends StatelessWidget {
       child: Image.asset(AssetsManager.logoPng, fit: BoxFit.contain),
     );
   }
+
+  // ============================================================
+  // TITLE
+  // ============================================================
 
   Widget _buildTitle(BuildContext context) {
     final TextStyle titleStyle = context.textTheme.headlineSmall!;
@@ -96,10 +89,12 @@ class LanguageBody extends StatelessWidget {
             text: '${context.l10n.chooseLanguageStart} ',
             style: titleStyle,
           ),
+
           TextSpan(
             text: '${context.l10n.chooseLanguageMiddle} ',
             style: titleStyle.copyWith(color: ColorsManager.secondary),
           ),
+
           TextSpan(text: context.l10n.chooseLanguageEnd, style: titleStyle),
         ],
       ),
@@ -119,7 +114,7 @@ class LanguageBody extends StatelessWidget {
       children: [
         LanguageCard(
           title: StringsManager.arabicLanguage,
-          flag: '🇯🇴',
+          flag: AssetsManager.emojioneFlagJordan,
           selected: state.selectedLanguage == 'ar',
           onTap: () => _selectLanguage(context, 'ar'),
         ),
@@ -128,7 +123,7 @@ class LanguageBody extends StatelessWidget {
 
         LanguageCard(
           title: StringsManager.englishLanguage,
-          flag: '🇬🇧',
+          flag: AssetsManager.emojioneFlagEngland,
           selected: state.selectedLanguage == 'en',
           onTap: () => _selectLanguage(context, 'en'),
         ),
@@ -147,16 +142,19 @@ class LanguageBody extends StatelessWidget {
     await cubit.saveLanguage();
   }
 
-  Widget _buildContinueButton(BuildContext context, LanguageState state) {
+  Widget _buildContinueButton(BuildContext context) {
     return CustomButton(
       text: context.l10n.continueText,
+
       onPressed: () {
         context.pushNamedAndRemoveUntil(AppRoutes.onboardingView);
       },
-      textStyle: context.textTheme.titleMedium!.copyWith(color: Colors.white),
+
+      textStyle: context.textTheme.labelLarge,
+
       suffixIcon: const Icon(
         Icons.arrow_forward,
-        color: Colors.white,
+        color: ColorsManager.white,
         size: 20,
       ),
     );

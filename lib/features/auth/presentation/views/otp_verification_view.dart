@@ -17,10 +17,8 @@ class OtpVerificationView extends StatelessWidget {
     return BlocProvider(
       create: (_) => getIt<OtpVerificationCubit>(),
       child: Scaffold(
-        body: SafeArea(
-          child: OtpVerificationBody(
-            email: email,
-          ),
+        body: OtpVerificationBody(
+          email: email,
         ),
       ),
     );

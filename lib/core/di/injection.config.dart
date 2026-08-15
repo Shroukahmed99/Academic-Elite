@@ -28,6 +28,8 @@ import 'package:academic_elite/features/auth/domain/use_cases/login_usecase.dart
     as _i932;
 import 'package:academic_elite/features/auth/domain/use_cases/register_usecase.dart'
     as _i102;
+import 'package:academic_elite/features/auth/domain/use_cases/verify_otp_usecase.dart'
+    as _i1048;
 import 'package:academic_elite/features/auth/presentation/manager/create_password_cubit/create_password_cubit.dart'
     as _i987;
 import 'package:academic_elite/features/auth/presentation/manager/forgot_password_cubit/forgot_password_cubit.dart'
@@ -51,28 +53,27 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final networkModule = _$NetworkModule();
-    gh.factory<_i741.OtpVerificationCubit>(() => _i741.OtpVerificationCubit());
     gh.singleton<_i394.ApiManager>(() => _i394.ApiManager());
     gh.lazySingleton<_i161.InternetConnection>(
       () => networkModule.internetConnection,
     );
-    gh.lazySingleton<_i895.ForgotPasswordUseCase>(
-      () => _i895.ForgotPasswordUseCase(),
-    );
-    gh.factory<_i165.ForgotPasswordCubit>(
-      () => _i165.ForgotPasswordCubit(gh<_i895.ForgotPasswordUseCase>()),
-    );
     gh.lazySingleton<_i476.AuthRemoteDataSource>(
-      () => _i223.AuthRemoteDataSourceImpl(gh<_i394.ApiManager>()),
+      () => _i223.AuthRemoteDataSourceImpl(),
     );
     gh.lazySingleton<_i968.NetworkInfo>(
       () => _i968.NetworkInfoImpl(gh<_i161.InternetConnection>()),
     );
     gh.lazySingleton<_i148.AuthRepository>(
-      () => _i307.AuthRepositoryImpl(gh<_i476.AuthRemoteDataSource>()),
+      () => _i307.AuthRepositoryImpl(
+        gh<_i476.AuthRemoteDataSource>(),
+        gh<_i968.NetworkInfo>(),
+      ),
     );
     gh.lazySingleton<_i790.CreatePasswordUseCase>(
       () => _i790.CreatePasswordUseCase(gh<_i148.AuthRepository>()),
+    );
+    gh.lazySingleton<_i895.ForgotPasswordUseCase>(
+      () => _i895.ForgotPasswordUseCase(gh<_i148.AuthRepository>()),
     );
     gh.lazySingleton<_i932.LoginUseCase>(
       () => _i932.LoginUseCase(gh<_i148.AuthRepository>()),
@@ -80,14 +81,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i102.RegisterUseCase>(
       () => _i102.RegisterUseCase(gh<_i148.AuthRepository>()),
     );
+    gh.lazySingleton<_i1048.VerifyOtpUseCase>(
+      () => _i1048.VerifyOtpUseCase(gh<_i148.AuthRepository>()),
+    );
+    gh.factory<_i165.ForgotPasswordCubit>(
+      () => _i165.ForgotPasswordCubit(gh<_i895.ForgotPasswordUseCase>()),
+    );
     gh.factory<_i100.RegisterCubit>(
       () => _i100.RegisterCubit(gh<_i102.RegisterUseCase>()),
     );
     gh.factory<_i435.LoginCubit>(
-      () => _i435.LoginCubit(gh<_i932.LoginUseCase>()),
+      () => _i435.LoginCubit(loginUseCase: gh<_i932.LoginUseCase>()),
     );
     gh.factory<_i987.CreatePasswordCubit>(
       () => _i987.CreatePasswordCubit(gh<_i790.CreatePasswordUseCase>()),
+    );
+    gh.factory<_i741.OtpVerificationCubit>(
+      () => _i741.OtpVerificationCubit(
+        verifyOtpUseCase: gh<_i1048.VerifyOtpUseCase>(),
+        forgotPasswordUseCase: gh<_i895.ForgotPasswordUseCase>(),
+      ),
     );
     return this;
   }

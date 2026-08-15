@@ -1,3 +1,6 @@
+
+import 'package:academic_elite/core/errors/failures.dart';
+
 abstract class OtpVerificationState {}
 
 class OtpVerificationInitial extends OtpVerificationState {}
@@ -7,9 +10,21 @@ class OtpVerificationLoading extends OtpVerificationState {}
 class OtpVerificationSuccess extends OtpVerificationState {}
 
 class OtpVerificationError extends OtpVerificationState {
-  OtpVerificationError(this.message);
+  final Failure failure;
 
-  final String message;
+  OtpVerificationError({
+    required this.failure,
+  });
 }
 
-class OtpVerificationResent extends OtpVerificationState {}
+class OtpResendLoading extends OtpVerificationState {}
+
+class OtpResendSuccess extends OtpVerificationState {}
+
+class OtpResendError extends OtpVerificationState {
+  final Failure failure;
+
+  OtpResendError({
+    required this.failure,
+  });
+}

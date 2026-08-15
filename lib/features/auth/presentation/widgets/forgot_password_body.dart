@@ -1,6 +1,9 @@
 import 'package:academic_elite/config/routes/app_routes.dart';
+import 'package:academic_elite/core/components/custom_app_bar.dart';
 import 'package:academic_elite/core/components/custom_button.dart';
 import 'package:academic_elite/core/components/custom_text_field.dart';
+import 'package:academic_elite/core/components/curved_page_layout.dart';
+import 'package:academic_elite/core/errors/mappers/failure_to_message_mapper.dart';
 import 'package:academic_elite/core/extensions/localization_extension.dart';
 import 'package:academic_elite/core/extensions/navigation_extension.dart';
 import 'package:academic_elite/core/extensions/theme_extension.dart';
@@ -12,47 +15,33 @@ import 'package:academic_elite/features/auth/presentation/manager/forgot_passwor
 import 'package:academic_elite/features/auth/presentation/manager/forgot_password_cubit/forgot_password_state.dart';
 import 'package:academic_elite/features/auth/presentation/widgets/auth_divider.dart';
 import 'package:academic_elite/features/auth/presentation/widgets/auth_header.dart';
-import 'package:academic_elite/features/auth/presentation/widgets/auth_page_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ForgotPasswordBody extends StatefulWidget {
+class ForgotPasswordBody extends StatelessWidget {
   const ForgotPasswordBody({super.key});
 
   @override
-  State<ForgotPasswordBody> createState() => _ForgotPasswordBodyState();
-}
-
-class _ForgotPasswordBodyState extends State<ForgotPasswordBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  late final TextEditingController _emailController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _emailController = TextEditingController(
-      text: 'shrouk@gmail.com',
-    );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AuthPageLayout(
-      title: context.l10n.forgotPassword,
-      child: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
+    final cubit = context.read<ForgotPasswordCubit>();
+
+    return CurvedPageLayout(
+      bodyPadding: EdgeInsets.symmetric(horizontal: AppSizes.p16),
+      header: CustomAppBar(
+        title: context.l10n.forgotPassword,
+        showBackButton: true,
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+
+      body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
         listener: _handleState,
+
         child: Form(
-          key: _formKey,
+          key: cubit.formKey,
+
           child: Column(
             children: [
               AuthHeader(
@@ -70,7 +59,7 @@ class _ForgotPasswordBodyState extends State<ForgotPasswordBody> {
 
               SizedBox(height: AppSizes.h(20)),
 
-              _buildButton(context),
+              _buildSendButton(context),
 
               SizedBox(height: AppSizes.h(30)),
             ],
@@ -80,30 +69,31 @@ class _ForgotPasswordBodyState extends State<ForgotPasswordBody> {
     );
   }
 
-  void _handleState(
-    BuildContext context,
-    ForgotPasswordState state,
-  ) {
+  void _handleState(BuildContext context, ForgotPasswordState state) {
     if (state is ForgotPasswordSuccess) {
-      context.pushNamed(
-        AppRoutes.otpVerification,
-        arguments: _emailController.text.trim(),
-      );
+      final email = context
+          .read<ForgotPasswordCubit>()
+          .emailController
+          .text
+          .trim();
+
+      context.pushNamed(AppRoutes.otpVerification, arguments: email);
+
       return;
     }
 
     if (state is ForgotPasswordError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.message),
-        ),
+        SnackBar(content: Text(mapFailureToMessage(context, state.failure))),
       );
     }
   }
 
   Widget _buildEmailField(BuildContext context) {
+    final cubit = context.read<ForgotPasswordCubit>();
+
     return CustomTextField(
-      controller: _emailController,
+      controller: cubit.emailController,
       hintText: context.l10n.emailHint,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.done,
@@ -112,38 +102,29 @@ class _ForgotPasswordBodyState extends State<ForgotPasswordBody> {
         padding: EdgeInsets.all(AppSizes.p14),
         child: SvgPicture.asset(
           AssetsManager.mail,
-          width: AppSizes.w(20),
-          height: AppSizes.h(20),
+          width: AppSizes.sp(20),
+          height: AppSizes.sp(20),
         ),
       ),
     );
   }
 
-  Widget _buildButton(BuildContext context) {
+  // ============================================================
+
+  Widget _buildSendButton(BuildContext context) {
     return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
       builder: (context, state) {
         return CustomButton(
           text: context.l10n.sendVerificationCode,
           isLoading: state is ForgotPasswordLoading,
-          onPressed: _sendCode,
           height: 50,
           borderRadius: 24,
-          textStyle: context.textTheme.titleMedium!.copyWith(
-            color: ColorsManager.white,
-          ),
+          onPressed: () {
+            context.read<ForgotPasswordCubit>().forgotPassword();
+          },
+          textStyle: context.textTheme.labelLarge!,
         );
       },
-    );
-  }
-
-  void _sendCode() {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    context.pushNamed(
-      AppRoutes.otpVerification,
-      arguments: _emailController.text.trim(),
     );
   }
 }

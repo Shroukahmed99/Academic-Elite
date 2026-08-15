@@ -45,8 +45,8 @@ class ThemeApp {
 
         // bodySmall: StylesManager.font1Regular12,
         labelLarge: StylesManager.whiteBold14,
-        // labelMedium: StylesManager.font1Medium12,
-        // labelSmall: StylesManager.font1Regular10,
+        labelMedium: StylesManager.primaryBold14,
+        labelSmall: StylesManager.font2Regular14,
       ),
 
       appBarTheme: AppBarTheme(

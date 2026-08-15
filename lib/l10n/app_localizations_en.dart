@@ -214,4 +214,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
+  String get offline_error => 'No internet connection';
+
+  @override
+  String get server_error => 'Something went wrong. Please try again later';
+
+  @override
+  String get too_many_requests => 'Too many requests. Please try again later';
+
+  @override
+  String get wrong_password => 'Incorrect password';
+
+  @override
+  String get no_user => 'No account found with these credentials';
+
+  @override
+  String get account_exists => 'An account already exists with this email';
+
+  @override
+  String get weak_password => 'The password is too weak';
+
+  @override
+  String get unmatched_password => 'Passwords do not match';
+
+  @override
+  String get not_found => 'The requested item was not found';
+
+  @override
+  String get registerSuccessTitle => 'New account created successfully';
+
+  @override
+  String get registerSuccessDescription =>
+      'Your account is ready - let\'s start studying.';
+
+  @override
+  String get goToHome => 'Go to Home';
+
+  @override
+  String get confirmNewPasswordHint => 'Confirm new password';
+
+  @override
+  String get otpVerification => 'Email Verification';
+
+  @override
+  String get otpVerificationDescription =>
+      'Enter the verification code sent to your email to continue.';
+
+  @override
+  String get enterVerificationCode => 'Enter Verification Code';
+
+  @override
+  String get verify => 'Verify';
+
+  @override
+  String get enterCompleteVerificationCode =>
+      'Please enter the complete verification code';
+
+  @override
+  String get fullNameRequired => 'Please enter your full name';
+
+  @override
+  String get phoneRequired => 'Please enter your phone number';
+
+  @override
+  String get confirmPasswordHint => 'Confirm password';
+
+  @override
+  String get confirmPasswordRequired => 'Please confirm your password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get agreeTo => 'I agree to';
+
+  @override
+  String get termsRequired => 'You must agree to the Terms and Conditions';
+
+  @override
+  String get chooseStrongPassword => 'Choose a strong password';
+
+  @override
+  String get didNotReceiveCode => 'Didn\'t receive the code?';
+
+  @override
+  String get jordan => 'Jordan';
+
+  @override
+  String get england => 'England';
+
+  @override
+  String get noAccount => 'Don\'t have an account?';
 }

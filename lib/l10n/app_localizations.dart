@@ -481,6 +481,186 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم تغيير كلمة المرور بنجاح'**
   String get passwordChangedSuccessfully;
+
+  /// No description provided for @offline_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد اتصال بالإنترنت'**
+  String get offline_error;
+
+  /// No description provided for @server_error.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ ما، حاول مرة أخرى لاحقًا'**
+  String get server_error;
+
+  /// No description provided for @too_many_requests.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات كثيرة جدًا، حاول مرة أخرى لاحقًا'**
+  String get too_many_requests;
+
+  /// No description provided for @wrong_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور غير صحيحة'**
+  String get wrong_password;
+
+  /// No description provided for @no_user.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد حساب بهذه البيانات'**
+  String get no_user;
+
+  /// No description provided for @account_exists.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوجد حساب بالفعل بهذا البريد الإلكتروني'**
+  String get account_exists;
+
+  /// No description provided for @weak_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور ضعيفة جدًا'**
+  String get weak_password;
+
+  /// No description provided for @unmatched_password.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمتا المرور غير متطابقتين'**
+  String get unmatched_password;
+
+  /// No description provided for @not_found.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنصر المطلوب غير موجود'**
+  String get not_found;
+
+  /// No description provided for @registerSuccessTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء حساب جديد بنجاح'**
+  String get registerSuccessTitle;
+
+  /// No description provided for @registerSuccessDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابك جاهز - لنبدأ الدراسة.'**
+  String get registerSuccessDescription;
+
+  /// No description provided for @goToHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'الذهاب للرئيسية'**
+  String get goToHome;
+
+  /// No description provided for @confirmNewPasswordHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد كلمة المرور الجديدة'**
+  String get confirmNewPasswordHint;
+
+  /// No description provided for @otpVerification.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحقق من البريد الإلكتروني'**
+  String get otpVerification;
+
+  /// No description provided for @otpVerificationDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز التحقق المرسل إلى بريدك الإلكتروني للمتابعة.'**
+  String get otpVerificationDescription;
+
+  /// No description provided for @enterVerificationCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز التحقق'**
+  String get enterVerificationCode;
+
+  /// No description provided for @verify.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق'**
+  String get verify;
+
+  /// No description provided for @enterCompleteVerificationCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال رمز التحقق كاملاً'**
+  String get enterCompleteVerificationCode;
+
+  /// No description provided for @fullNameRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'من فضلك أدخل الاسم كامل'**
+  String get fullNameRequired;
+
+  /// No description provided for @phoneRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'من فضلك أدخل رقم الهاتف'**
+  String get phoneRequired;
+
+  /// No description provided for @confirmPasswordHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد كلمة المرور'**
+  String get confirmPasswordHint;
+
+  /// No description provided for @confirmPasswordRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'من فضلك أكد كلمة المرور'**
+  String get confirmPasswordRequired;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمتا المرور غير متطابقتين'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @agreeTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق على'**
+  String get agreeTo;
+
+  /// No description provided for @termsRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب الموافقة على الشروط والأحكام'**
+  String get termsRequired;
+
+  /// No description provided for @chooseStrongPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر كلمة مرور جديدة وقوية لحماية حسابك.'**
+  String get chooseStrongPassword;
+
+  /// No description provided for @didNotReceiveCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تستلم الكود بعد؟'**
+  String get didNotReceiveCode;
+
+  /// No description provided for @jordan.
+  ///
+  /// In ar, this message translates to:
+  /// **'Jordan'**
+  String get jordan;
+
+  /// No description provided for @england.
+  ///
+  /// In ar, this message translates to:
+  /// **'England'**
+  String get england;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس لديك حساب؟'**
+  String get noAccount;
 }
 
 class _AppLocalizationsDelegate

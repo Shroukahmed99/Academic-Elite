@@ -1,8 +1,10 @@
-import 'dart:async';
-
 import 'package:academic_elite/config/routes/app_routes.dart';
+import 'package:academic_elite/core/components/custom_app_bar.dart';
 import 'package:academic_elite/core/components/custom_button.dart';
 import 'package:academic_elite/core/components/custom_text.dart';
+import 'package:academic_elite/core/components/curved_page_layout.dart';
+import 'package:academic_elite/core/errors/mappers/failure_to_message_mapper.dart';
+import 'package:academic_elite/core/extensions/localization_extension.dart';
 import 'package:academic_elite/core/extensions/navigation_extension.dart';
 import 'package:academic_elite/core/extensions/theme_extension.dart';
 import 'package:academic_elite/core/utils/app_sizes.dart';
@@ -10,16 +12,13 @@ import 'package:academic_elite/core/utils/assets_manager.dart';
 import 'package:academic_elite/core/utils/colors_manager.dart';
 import 'package:academic_elite/features/auth/presentation/manager/otp_verification_cubit/otp_verification_cubit.dart';
 import 'package:academic_elite/features/auth/presentation/manager/otp_verification_cubit/otp_verification_state.dart';
-import 'package:academic_elite/features/auth/presentation/widgets/auth_page_layout.dart';
+import 'package:academic_elite/features/auth/presentation/widgets/auth_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OtpVerificationBody extends StatefulWidget {
-  const OtpVerificationBody({
-    super.key,
-    required this.email,
-  });
+  const OtpVerificationBody({super.key, required this.email});
 
   final String email;
 
@@ -31,31 +30,17 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
 
-  Timer? _timer;
-
-  int _remainingSeconds = 60;
-
   @override
   void initState() {
     super.initState();
 
-    _controllers = List.generate(
-      6,
-      (_) => TextEditingController(),
-    );
+    _controllers = List.generate(6, (_) => TextEditingController());
 
-    _focusNodes = List.generate(
-      6,
-      (_) => FocusNode(),
-    );
-
-    _startTimer();
+    _focusNodes = List.generate(6, (_) => FocusNode());
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
-
     for (final controller in _controllers) {
       controller.dispose();
     }
@@ -69,110 +54,83 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
 
   @override
   Widget build(BuildContext context) {
-    return AuthPageLayout(
-      title: 'التحقق من بريدك الإلكتروني',
-      child: BlocListener<OtpVerificationCubit, OtpVerificationState>(
-        listener: _handleState,
-        child: Column(
-          children: [
-            SizedBox(height: AppSizes.h(28)),
+    AppSizes.init(context);
 
-            _buildEmailImage(),
-
-            SizedBox(height: AppSizes.h(20)),
-
-            _buildDescription(context),
-
-            SizedBox(height: AppSizes.h(8)),
-
-            _buildEmail(context),
-
-            SizedBox(height: AppSizes.h(24)),
-
-            _buildCodeTitle(context),
-
-            SizedBox(height: AppSizes.h(8)),
-
-            _buildOtpFields(context),
-
-            SizedBox(height: AppSizes.h(20)),
-
-            _buildVerifyButton(context),
-
-            SizedBox(height: AppSizes.h(12)),
-
-            _buildResendButton(context),
-
-            SizedBox(height: AppSizes.h(30)),
-          ],
-        ),
+    return CurvedPageLayout(
+      bodyPadding: EdgeInsets.symmetric(horizontal: AppSizes.p16),
+      header: CustomAppBar(
+        title: context.l10n.otpVerification,
+        showBackButton: true,
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
+      body: BlocListener<OtpVerificationCubit, OtpVerificationState>(
+        listener: _handleState,
+        child: _buildBody(context),
+      ),
+      scrollable: true,
     );
   }
 
-  void _handleState(
-    BuildContext context,
-    OtpVerificationState state,
-  ) {
-    if (state is OtpVerificationSuccess) {
-      context.pushNamed(
-        AppRoutes.createNewPassword,
-        arguments: widget.email,
-      );
-      return;
-    }
+  Widget _buildBody(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: AppSizes.h(28)),
 
-    if (state is OtpVerificationError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.message),
-        ),
-      );
-    }
-  }
+        _buildEmailImage(),
 
-  void _startTimer() {
-    _timer?.cancel();
+        SizedBox(height: AppSizes.h(20)),
 
-    setState(() {
-      _remainingSeconds = 60;
-    });
+        _buildDescription(context),
 
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        if (_remainingSeconds == 0) {
-          timer.cancel();
-          setState(() {});
-          return;
-        }
+        SizedBox(height: AppSizes.h(8)),
 
-        setState(() {
-          _remainingSeconds--;
-        });
-      },
+        _buildEmail(context),
+
+        SizedBox(height: AppSizes.h(20)),
+
+        const AuthDivider(),
+
+        SizedBox(height: AppSizes.h(20)),
+
+        _buildOtpTitle(context),
+
+        SizedBox(height: AppSizes.h(16)),
+
+        _buildOtpFields(context),
+
+        SizedBox(height: AppSizes.h(24)),
+
+        _buildVerifyButton(context),
+
+        SizedBox(height: AppSizes.h(12)),
+
+        _buildResendButton(context),
+
+        SizedBox(height: AppSizes.h(30)),
+      ],
     );
   }
 
   Widget _buildEmailImage() {
     return SizedBox(
-      width: AppSizes.w(130),
-      height: AppSizes.h(130),
-      child: SvgPicture.asset(
-        AssetsManager.emailImage,
-        fit: BoxFit.contain,
-      ),
+      width: AppSizes.w(110),
+      height: AppSizes.h(110),
+      child: SvgPicture.asset(AssetsManager.emailImage, fit: BoxFit.contain),
     );
   }
 
   Widget _buildDescription(BuildContext context) {
     return CustomText(
-      text:
-          'لقد أرسلنا إليك للتو رمزًا مكونًا من 6 أرقام عبر بريدك الإلكتروني:',
+      text: context.l10n.otpVerificationDescription,
       textAlign: TextAlign.center,
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
-      style: context.textTheme.bodyMedium!,
+      style: context.textTheme.bodyMedium!.copyWith(
+        color: ColorsManager.primary,
+        fontSize: AppSizes.sp(14),
+        fontWeight: FontWeight.w500,
+        height: 1.5,
+      ),
     );
   }
 
@@ -180,41 +138,19 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: AppSizes.w(24),
-          height: AppSizes.h(24),
-          decoration: BoxDecoration(
-            color: ColorsManager.primary,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            Icons.email_outlined,
-            color: ColorsManager.white,
-            size: AppSizes.sp(14),
-          ),
-        ),
+        CustomText(text: widget.email, style: context.textTheme.bodyLarge),
         SizedBox(width: AppSizes.w(8)),
-        Flexible(
-          child: CustomText(
-            text: widget.email,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: context.textTheme.bodyMedium!.copyWith(
-              fontWeight: FontWeight.w600,
-              color: ColorsManager.primary,
-            ),
-          ),
-        ),
+
+        SvgPicture.asset(AssetsManager.editIcon),
       ],
     );
   }
 
-  Widget _buildCodeTitle(BuildContext context) {
+  Widget _buildOtpTitle(BuildContext context) {
     return CustomText(
-      text: 'أدخل الرمز',
+      text: context.l10n.enterVerificationCode,
       textAlign: TextAlign.center,
-      style: context.textTheme.bodyMedium!,
+      style: context.textTheme.titleMedium!,
     );
   }
 
@@ -222,71 +158,49 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          6,
-          (index) => Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSizes.w(3),
-            ),
-            child: _buildOtpField(
-              context,
-              index,
-            ),
-          ),
-        ),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(6, (index) => _buildOtpField(context, index)),
       ),
     );
   }
 
-  Widget _buildOtpField(
-    BuildContext context,
-    int index,
-  ) {
-    final bool isFilled = _controllers[index].text.isNotEmpty;
-
+  Widget _buildOtpField(BuildContext context, int index) {
     return SizedBox(
-      width: AppSizes.w(44),
-      height: AppSizes.h(56),
+      width: AppSizes.w(48),
+      height: AppSizes.h(52),
       child: TextField(
         controller: _controllers[index],
         focusNode: _focusNodes[index],
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         maxLength: 1,
-        style: context.textTheme.titleLarge!.copyWith(
-          color: ColorsManager.primary,
-          fontWeight: FontWeight.w600,
-        ),
+        style: context.textTheme.titleLarge,
         decoration: InputDecoration(
           counterText: '',
           filled: true,
-          fillColor: ColorsManager.background,
+          fillColor: ColorsManager.font6,
+
           contentPadding: EdgeInsets.zero,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              AppSizes.r16,
-            ),
-            borderSide: BorderSide(
-              color: isFilled
-                  ? ColorsManager.secondary
-                  : ColorsManager.font5,
-              width: 1,
-            ),
+
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSizes.r(12)),
+            borderSide: BorderSide.none,
           ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSizes.r(12)),
+            borderSide: BorderSide.none,
+          ),
+
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              AppSizes.r16,
-            ),
+            borderRadius: BorderRadius.circular(AppSizes.r(12)),
             borderSide: BorderSide(
-              color: ColorsManager.secondary,
-              width: 1.5,
+              color: ColorsManager.primary,
+              width: AppSizes.w(1),
             ),
           ),
         ),
         onChanged: (value) {
-          setState(() {});
-
           if (value.isNotEmpty && index < 5) {
             _focusNodes[index + 1].requestFocus();
           }
@@ -303,16 +217,16 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     return BlocBuilder<OtpVerificationCubit, OtpVerificationState>(
       builder: (context, state) {
         return CustomButton(
-          text: 'متابعة',
+          text: context.l10n.verify,
+          suffixIcon: Icon(
+            context.isArabic ? Icons.arrow_forward : Icons.arrow_back,
+            color: ColorsManager.white,
+            size: AppSizes.sp(20),
+          ),
           isLoading: state is OtpVerificationLoading,
           onPressed: _verifyOtp,
           height: 50,
           borderRadius: 24,
-          suffixIcon: Icon(
-            Icons.arrow_back,
-            color: ColorsManager.white,
-            size: AppSizes.sp(20),
-          ),
           textStyle: context.textTheme.titleMedium!.copyWith(
             color: ColorsManager.white,
           ),
@@ -321,18 +235,70 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     );
   }
 
+  Widget _buildResendButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        context.read<OtpVerificationCubit>().resendOtp(email: widget.email);
+      },
+      borderRadius: BorderRadius.circular(AppSizes.r(24)),
+      child: Container(
+        width: double.infinity,
+        height: AppSizes.h(50),
+        padding: EdgeInsets.symmetric(horizontal: AppSizes.p16),
+        decoration: BoxDecoration(
+          color: ColorsManager.background,
+          borderRadius: BorderRadius.circular(AppSizes.r(24)),
+          border: Border.all(color: ColorsManager.font4, width: AppSizes.w(1)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: AppSizes.w(20),
+              height: AppSizes.w(20),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: ColorsManager.primary,
+                  width: AppSizes.w(1),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: CustomText(
+                text: '44',
+                style: context.textTheme.labelMedium!.copyWith(
+                  fontSize: AppSizes.sp(12),
+                ),
+              ),
+            ),
+            SizedBox(width: AppSizes.w(8)),
+
+            CustomText(
+              text: context.l10n.didNotReceiveCode,
+              style: context.textTheme.labelSmall,
+            ),
+
+            SizedBox(width: AppSizes.w(8)),
+
+            CustomText(
+              text: context.l10n.resendCode,
+              style: context.textTheme.labelMedium!.copyWith(
+                decoration: TextDecoration.underline,
+                decorationColor: ColorsManager.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _verifyOtp() {
-    final String otp = _controllers
-        .map((controller) => controller.text)
-        .join();
+    final otp = _controllers.map((controller) => controller.text).join();
 
     if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'من فضلك أدخل رمز التحقق كاملًا',
-          ),
-        ),
+        SnackBar(content: Text(context.l10n.enterCompleteVerificationCode)),
       );
 
       return;
@@ -344,29 +310,17 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     );
   }
 
-  Widget _buildResendButton(BuildContext context) {
-    final bool canResend = _remainingSeconds == 0;
+  void _handleState(BuildContext context, OtpVerificationState state) {
+    if (state is OtpVerificationSuccess) {
+      context.pushNamed(AppRoutes.createNewPassword, arguments: widget.email);
 
-    return CustomButton.outlined(
-      text: canResend
-          ? 'إعادة الإرسال'
-          : 'إعادة الإرسال بعد $_remainingSeconds ث',
-      onPressed: canResend ? _resendCode : null,
-      height: 50,
-      borderRadius: 24,
-      borderColor: ColorsManager.font4,
-      textColor: ColorsManager.primary,
-      textStyle: context.textTheme.titleSmall!.copyWith(
-        color: ColorsManager.primary,
-      ),
-    );
-  }
+      return;
+    }
 
-  void _resendCode() {
-    context.read<OtpVerificationCubit>().resendOtp(
-      email: widget.email,
-    );
-
-    _startTimer();
+    if (state is OtpVerificationError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(mapFailureToMessage(context, state.failure))),
+      );
+    }
   }
 }

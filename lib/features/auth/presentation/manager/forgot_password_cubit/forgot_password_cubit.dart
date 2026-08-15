@@ -1,28 +1,44 @@
 import 'package:academic_elite/features/auth/domain/use_cases/forgot_password_usecase.dart';
 import 'package:academic_elite/features/auth/presentation/manager/forgot_password_cubit/forgot_password_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   ForgotPasswordCubit(this.forgotPasswordUseCase)
-      : super(ForgotPasswordInitial());
+    : super(ForgotPasswordInitial());
 
   final ForgotPasswordUseCase forgotPasswordUseCase;
 
-  Future<void> forgotPassword({
-    required String email,
-  }) async {
+  final formKey = GlobalKey<FormState>();
+
+  final emailController = TextEditingController(text: 'test@gmail.com');
+
+  Future<void> forgotPassword() async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
     emit(ForgotPasswordLoading());
 
-    try {
-      await forgotPasswordUseCase(
-        email: email,
-      );
+    final result = await forgotPasswordUseCase(
+      email: emailController.text.trim(),
+    );
 
-      emit(ForgotPasswordSuccess());
-    } catch (e) {
-      emit(ForgotPasswordError(e.toString()));
-    }
+    result.fold(
+      (failure) {
+        emit(ForgotPasswordError(failure: failure));
+      },
+      (response) {
+        emit(ForgotPasswordSuccess(response: response));
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    emailController.dispose();
+    return super.close();
   }
 }

@@ -4,6 +4,7 @@ import 'package:academic_elite/core/utils/app_sizes.dart';
 import 'package:academic_elite/core/utils/colors_manager.dart';
 import 'package:academic_elite/features/language/presentation/widgets/selection_circle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LanguageCard extends StatelessWidget {
   const LanguageCard({
@@ -15,7 +16,9 @@ class LanguageCard extends StatelessWidget {
   });
 
   final String title;
+
   final String flag;
+
   final bool selected;
   final VoidCallback onTap;
 
@@ -28,12 +31,20 @@ class LanguageCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         width: double.infinity,
         height: AppSizes.h(70),
-        padding: EdgeInsets.symmetric(horizontal: AppSizes.p12),
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSizes.p12,
+        ),
         decoration: BoxDecoration(
-          color: selected ? ColorsManager.secondary10 : ColorsManager.font6,
-          borderRadius: BorderRadius.circular(AppSizes.r(16)),
+          color: selected
+              ? ColorsManager.secondary10
+              : ColorsManager.font6,
+          borderRadius: BorderRadius.circular(
+            AppSizes.r(16),
+          ),
           border: Border.all(
-            color: selected ? ColorsManager.primary: ColorsManager.font6,
+            color: selected
+                ? ColorsManager.primary
+                : ColorsManager.font6,
             width: selected ? 1 : 0,
           ),
         ),
@@ -41,7 +52,9 @@ class LanguageCard extends StatelessWidget {
           children: [
             _buildFlag(),
 
-            SizedBox(width: AppSizes.w(8)),
+            SizedBox(
+              width: AppSizes.w(8),
+            ),
 
             Expanded(
               child: CustomText(
@@ -51,9 +64,13 @@ class LanguageCard extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: AppSizes.w(12)),
+            SizedBox(
+              width: AppSizes.w(12),
+            ),
 
-            SelectionCircle(selected: selected),
+            SelectionCircle(
+              selected: selected,
+            ),
           ],
         ),
       ),
@@ -61,6 +78,13 @@ class LanguageCard extends StatelessWidget {
   }
 
   Widget _buildFlag() {
-    return Text(flag, style: TextStyle(fontSize: AppSizes.sp(18)));
+    return SizedBox(
+      width: AppSizes.w(28),
+      height: AppSizes.h(22),
+      child: SvgPicture.asset(
+        flag,
+        fit: BoxFit.contain,
+      ),
+    );
   }
 }

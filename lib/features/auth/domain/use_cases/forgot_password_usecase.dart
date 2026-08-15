@@ -1,17 +1,20 @@
+import 'package:academic_elite/core/errors/failures.dart';
+import 'package:academic_elite/features/auth/domain/auth_repo/auth_repo.dart';
+import 'package:academic_elite/features/auth/domain/entities/forgot_password_entity.dart';
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class ForgotPasswordUseCase {
-  Future<void> call({
-    required String email,
-  }) async {
-    // Fake API delay
-    await Future.delayed(
-      const Duration(milliseconds: 800),
-    );
+  final AuthRepository repository;
 
-    // Fake success
-    // أي Email صحيح من ناحية الـ UI يعتبر Success
-    return;
+  ForgotPasswordUseCase(this.repository);
+
+  Future<Either<Failure, ForgotPasswordEntity>> call({
+    required String email,
+  }) {
+    return repository.forgotPassword(
+      email: email,
+    );
   }
 }

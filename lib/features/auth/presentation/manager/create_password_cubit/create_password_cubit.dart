@@ -1,38 +1,50 @@
 import 'package:academic_elite/features/auth/domain/use_cases/create_password_use_case.dart';
 import 'package:academic_elite/features/auth/presentation/manager/create_password_cubit/create_password_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class CreatePasswordCubit
-    extends Cubit<CreatePasswordState> {
-  CreatePasswordCubit(
-    this.createPasswordUseCase,
-  ) : super(CreatePasswordInitial());
+class CreatePasswordCubit extends Cubit<CreatePasswordState> {
+  CreatePasswordCubit(this.createPasswordUseCase)
+    : super(CreatePasswordInitial());
 
   final CreatePasswordUseCase createPasswordUseCase;
 
-  Future<void> createPassword({
-    required String email,
-    required String password,
-    required String confirmPassword,
-  }) async {
+  final formKey = GlobalKey<FormState>();
+
+  final passwordController = TextEditingController(text: 'Test@123456');
+
+  final confirmPasswordController = TextEditingController(text: 'Test@123456');
+
+  Future<void> createPassword({required String email}) async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
     emit(CreatePasswordLoading());
 
-    try {
-      await createPasswordUseCase.call(
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
-      );
+    final result = await createPasswordUseCase(
+      email: email,
+      password: passwordController.text,
+      confirmPassword: confirmPasswordController.text,
+    );
 
-      emit(CreatePasswordSuccess());
-    } catch (e) {
-      emit(
-        CreatePasswordError(
-          e.toString(),
-        ),
-      );
-    }
+    result.fold(
+      (failure) {
+        emit(CreatePasswordError(failure: failure));
+      },
+      (response) {
+        emit(CreatePasswordSuccess(response: response));
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+
+    return super.close();
   }
 }

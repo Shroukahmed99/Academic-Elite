@@ -1,7 +1,10 @@
 import 'package:academic_elite/config/routes/app_routes.dart';
+import 'package:academic_elite/core/components/custom_app_bar.dart';
 import 'package:academic_elite/core/components/custom_button.dart';
 import 'package:academic_elite/core/components/custom_text.dart';
 import 'package:academic_elite/core/components/custom_text_field.dart';
+import 'package:academic_elite/core/components/curved_page_layout.dart';
+import 'package:academic_elite/core/errors/mappers/failure_to_message_mapper.dart';
 import 'package:academic_elite/core/extensions/localization_extension.dart';
 import 'package:academic_elite/core/extensions/navigation_extension.dart';
 import 'package:academic_elite/core/extensions/theme_extension.dart';
@@ -11,9 +14,10 @@ import 'package:academic_elite/core/utils/colors_manager.dart';
 import 'package:academic_elite/core/validators/validation_helper.dart';
 import 'package:academic_elite/features/auth/presentation/manager/register_cubit/register_cubit.dart';
 import 'package:academic_elite/features/auth/presentation/manager/register_cubit/register_state.dart';
+import 'package:academic_elite/features/auth/presentation/widgets/account_switch_button.dart';
 import 'package:academic_elite/features/auth/presentation/widgets/auth_divider.dart';
 import 'package:academic_elite/features/auth/presentation/widgets/auth_header.dart';
-import 'package:academic_elite/features/auth/presentation/widgets/auth_page_layout.dart';
+import 'package:academic_elite/features/auth/presentation/widgets/phone_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,136 +30,109 @@ class RegisterBody extends StatefulWidget {
 }
 
 class _RegisterBodyState extends State<RegisterBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  late final TextEditingController _nameController;
-  late final TextEditingController _emailController;
-  late final TextEditingController _phoneController;
-  late final TextEditingController _passwordController;
-  late final TextEditingController _confirmPasswordController;
-
   bool _acceptedTerms = false;
 
   @override
-  void initState() {
-    super.initState();
-
-    _nameController = TextEditingController(
-      text: 'محمود السيد',
-    );
-    _emailController = TextEditingController(
-      text: 'test@gmail.com',
-    );
-    _phoneController = TextEditingController(
-      text: '0791234567',
-    );
-    _passwordController = TextEditingController(
-      text: 'Test@123456',
-    );
-    _confirmPasswordController = TextEditingController(
-      text: 'Test@123456',
-    );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AuthPageLayout(
-      title: context.l10n.createAccount,
-      child: BlocListener<RegisterCubit, RegisterState>(
+    AppSizes.init(context);
+
+    return CurvedPageLayout(
+      header: _buildAppBar(context),
+      body: BlocListener<RegisterCubit, RegisterState>(
         listener: _handleState,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              AuthHeader(
-                title: context.l10n.createAccount,
-                description:
-                    'أنشئ حسابك للوصول إلى الدورات والخدمات الأكاديمية.',
-              ),
+        child: _buildContent(context),
+      ),
+      scrollable: true,
+    );
+  }
 
-              SizedBox(height: AppSizes.h(16)),
+  Widget _buildAppBar(BuildContext context) {
+    return CustomAppBar(title: "", showBackButton: false);
+  }
 
-              const AuthDivider(),
+  Widget _buildContent(BuildContext context) {
+    final cubit = context.read<RegisterCubit>();
 
-              SizedBox(height: AppSizes.h(16)),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppSizes.p16),
+      child: Form(
+        key: cubit.formKey,
+        child: Column(
+          children: [
+            SizedBox(height: AppSizes.h(28)),
 
-              _buildNameField(context),
+            AuthHeader(
+              title: context.l10n.createAccount,
+              description: context.l10n.registerDescription,
+            ),
 
-              SizedBox(height: AppSizes.h(10)),
+            SizedBox(height: AppSizes.h(16)),
 
-              _buildEmailField(context),
+            const AuthDivider(),
 
-              SizedBox(height: AppSizes.h(10)),
+            SizedBox(height: AppSizes.h(16)),
 
-              _buildPhoneField(context),
+            _buildNameField(context),
 
-              SizedBox(height: AppSizes.h(10)),
+            SizedBox(height: AppSizes.h(10)),
 
-              _buildPasswordField(context),
+            _buildEmailField(context),
 
-              SizedBox(height: AppSizes.h(10)),
+            SizedBox(height: AppSizes.h(10)),
 
-              _buildConfirmPasswordField(context),
+            _buildPhoneField(context),
 
-              SizedBox(height: AppSizes.h(10)),
+            SizedBox(height: AppSizes.h(10)),
 
-              _buildTermsRow(context),
+            _buildPasswordField(context),
 
-              SizedBox(height: AppSizes.h(16)),
+            SizedBox(height: AppSizes.h(10)),
 
-              _buildRegisterButton(context),
+            _buildConfirmPasswordField(context),
 
-              SizedBox(height: AppSizes.h(10)),
+            SizedBox(height: AppSizes.h(10)),
 
-              _buildLoginButton(context),
+            _buildTermsRow(context),
 
-              SizedBox(height: AppSizes.h(24)),
-            ],
-          ),
+            SizedBox(height: AppSizes.h(16)),
+
+            _buildRegisterButton(context),
+
+            SizedBox(height: AppSizes.h(10)),
+
+            _buildLoginButton(context),
+
+            SizedBox(height: AppSizes.h(24)),
+          ],
         ),
       ),
     );
   }
 
-  void _handleState(
-    BuildContext context,
-    RegisterState state,
-  ) {
+  void _handleState(BuildContext context, RegisterState state) {
     if (state is RegisterSuccess) {
-      context.pushNamedAndRemoveUntil(
-        AppRoutes.registerSuccess,
-      );
+      context.pushNamedAndRemoveUntil(AppRoutes.registerSuccess);
+
       return;
     }
 
     if (state is RegisterError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.message),
-        ),
+        SnackBar(content: Text(mapFailureToMessage(context, state.failure))),
       );
     }
   }
 
   Widget _buildNameField(BuildContext context) {
+    final cubit = context.read<RegisterCubit>();
+
     return CustomTextField(
-      controller: _nameController,
-      hintText: 'أدخل الاسم كامل',
+      controller: cubit.nameController,
+      hintText: context.l10n.fullNameHint,
       textInputAction: TextInputAction.next,
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
-          return 'من فضلك أدخل الاسم كامل';
+          return context.l10n.fullNameRequired;
         }
 
         return null;
@@ -172,8 +149,10 @@ class _RegisterBodyState extends State<RegisterBody> {
   }
 
   Widget _buildEmailField(BuildContext context) {
+    final cubit = context.read<RegisterCubit>();
+
     return CustomTextField(
-      controller: _emailController,
+      controller: cubit.emailController,
       hintText: context.l10n.emailHint,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
@@ -190,32 +169,28 @@ class _RegisterBodyState extends State<RegisterBody> {
   }
 
   Widget _buildPhoneField(BuildContext context) {
-    return CustomTextField(
-      controller: _phoneController,
-      hintText: 'أدخل رقم الهاتف',
-      keyboardType: TextInputType.phone,
-      textInputAction: TextInputAction.next,
+    final cubit = context.read<RegisterCubit>();
+
+    return PhoneInputField(
+      controller: cubit.phoneController,
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
-          return 'من فضلك أدخل رقم الهاتف';
+          return context.l10n.phoneRequired;
         }
 
         return null;
       },
-      prefixIcon: Padding(
-        padding: EdgeInsets.all(AppSizes.p14),
-        child: SvgPicture.asset(
-          AssetsManager.emojioneFlagJordan,
-          width: AppSizes.sp(20),
-          height: AppSizes.sp(20),
-        ),
-      ),
+      onCountryChanged: (country) {
+        debugPrint(country.code);
+      },
     );
   }
 
   Widget _buildPasswordField(BuildContext context) {
+    final cubit = context.read<RegisterCubit>();
+
     return CustomTextField(
-      controller: _passwordController,
+      controller: cubit.passwordController,
       hintText: context.l10n.passwordHint,
       isPassword: true,
       textInputAction: TextInputAction.next,
@@ -232,18 +207,20 @@ class _RegisterBodyState extends State<RegisterBody> {
   }
 
   Widget _buildConfirmPasswordField(BuildContext context) {
+    final cubit = context.read<RegisterCubit>();
+
     return CustomTextField(
-      controller: _confirmPasswordController,
-      hintText: 'تأكيد كلمة المرور',
+      controller: cubit.confirmPasswordController,
+      hintText: context.l10n.confirmPasswordHint,
       isPassword: true,
       textInputAction: TextInputAction.done,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'من فضلك أكد كلمة المرور';
+          return context.l10n.confirmPasswordRequired;
         }
 
-        if (value != _passwordController.text) {
-          return 'كلمتا المرور غير متطابقتين';
+        if (value != cubit.passwordController.text) {
+          return context.l10n.passwordsDoNotMatch;
         }
 
         return null;
@@ -261,23 +238,8 @@ class _RegisterBodyState extends State<RegisterBody> {
 
   Widget _buildTermsRow(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CustomText(
-          text: 'أوافق على ',
-          style: context.textTheme.bodySmall!,
-        ),
-        InkWell(
-          onTap: () {},
-          child: CustomText(
-            text: 'الشروط والأحكام',
-            style: context.textTheme.bodySmall!.copyWith(
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.underline,
-            ),
-          ),
-        ),
-        SizedBox(width: AppSizes.w(6)),
         SizedBox(
           width: AppSizes.w(24),
           height: AppSizes.h(24),
@@ -296,12 +258,37 @@ class _RegisterBodyState extends State<RegisterBody> {
             visualDensity: VisualDensity.compact,
           ),
         ),
+        SizedBox(width: AppSizes.w(6)),
+
+        CustomText(
+          text: context.l10n.agreeTo,
+          style: context.textTheme.bodySmall!,
+        ),
+
+        SizedBox(width: AppSizes.w(4)),
+
+        InkWell(
+          onTap: () {},
+          child: CustomText(
+            text: context.l10n.termsAndConditions,
+            style: context.textTheme.bodySmall!.copyWith(
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.underline,
+              color: ColorsManager.primary,
+            ),
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildRegisterButton(BuildContext context) {
     return BlocBuilder<RegisterCubit, RegisterState>(
+      buildWhen: (previous, current) {
+        return current is RegisterLoading ||
+            current is RegisterSuccess ||
+            current is RegisterError;
+      },
       builder: (context, state) {
         return CustomButton(
           text: context.l10n.createAccount,
@@ -309,51 +296,31 @@ class _RegisterBodyState extends State<RegisterBody> {
           onPressed: _register,
           height: 50,
           borderRadius: 24,
-          textStyle: context.textTheme.titleMedium!.copyWith(
-            color: ColorsManager.white,
-          ),
+          textStyle: context.textTheme.labelLarge,
         );
       },
     );
   }
 
+  void _register() {
+    if (!_acceptedTerms) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.termsRequired)));
+
+      return;
+    }
+
+    context.read<RegisterCubit>().register();
+  }
+
   Widget _buildLoginButton(BuildContext context) {
-    return CustomButton.outlined(
-      text: 'لديك حساب بالفعل؟  تسجيل الدخول',
+    return AccountSwitchButton(
+      leadingText: context.l10n.alreadyHaveAccount,
+      actionText: context.l10n.login,
       onPressed: () {
         context.pushNamed(AppRoutes.login);
       },
-      height: 50,
-      borderRadius: 24,
-      borderColor: ColorsManager.font4,
-      textColor: ColorsManager.primary,
-      textStyle: context.textTheme.titleSmall!.copyWith(
-        color: ColorsManager.primary,
-      ),
-    );
-  }
-
-  void _register() {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    if (!_acceptedTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('يجب الموافقة على الشروط والأحكام'),
-        ),
-      );
-
-      return;
-    }
-
-    context.read<RegisterCubit>().register(
-      name: _nameController.text.trim(),
-      email: _emailController.text.trim(),
-      phone: _phoneController.text.trim(),
-      password: _passwordController.text,
-      confirmPassword: _confirmPasswordController.text,
     );
   }
 }
