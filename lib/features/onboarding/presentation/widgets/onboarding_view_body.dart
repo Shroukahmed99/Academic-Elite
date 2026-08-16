@@ -41,21 +41,12 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
   Widget build(BuildContext context) {
     AppSizes.init(context);
 
-    final List<OnboardingModel> items =
-        _getOnboardingItems(context);
+    final List<OnboardingModel> items = _getOnboardingItems(context);
 
     return CurvedPageLayout(
       scrollable: false,
 
-  
-
-      header: CustomAppBar(
-        title: '',
-        showBackButton: true,
-        onBackPressed: _previousPage,
-      ),
-
-   
+      header: CustomAppBar(title: '', showBackButton: false),
 
       body: Column(
         children: [
@@ -67,64 +58,42 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
             ),
           ),
 
-          PageIndicator(
-            count: items.length,
-            currentPage: _currentPage,
-          ),
+          PageIndicator(count: items.length, currentPage: _currentPage),
 
-          SizedBox(
-            height: AppSizes.h(28),
-          ),
+          SizedBox(height: AppSizes.h(28)),
 
-          OnboardingNavigation(
-            onNext: () => _nextPage(items),
-            onSkip: _skip,
-          ),
+          OnboardingNavigation(onNext: () => _nextPage(items), onSkip: _skip),
 
-          SizedBox(
-            height: AppSizes.h(30),
-          ),
+          SizedBox(height: AppSizes.h(30)),
         ],
       ),
     );
   }
 
-
-
-  List<OnboardingModel> _getOnboardingItems(
-    BuildContext context,
-  ) {
+  List<OnboardingModel> _getOnboardingItems(BuildContext context) {
     return [
       OnboardingModel(
         image: AssetsManager.onboarding1,
         title: context.l10n.onboardingLearnSmarterTitle,
-        highlightedWord:
-            context.l10n.onboardingLearnSmarterHighlight,
-        description:
-            context.l10n.onboardingLearnSmarterDescription,
+        highlightedWord: context.l10n.onboardingLearnSmarterHighlight,
+        description: context.l10n.onboardingLearnSmarterDescription,
       ),
 
       OnboardingModel(
         image: AssetsManager.onboarding2,
         title: context.l10n.onboardingOrganizeStudyTitle,
-        highlightedWord:
-            context.l10n.onboardingOrganizeStudyHighlight,
-        description:
-            context.l10n.onboardingOrganizeStudyDescription,
+        highlightedWord: context.l10n.onboardingOrganizeStudyHighlight,
+        description: context.l10n.onboardingOrganizeStudyDescription,
       ),
 
       OnboardingModel(
         image: AssetsManager.onboarding3,
         title: context.l10n.onboardingAcademicSupportTitle,
-        highlightedWord:
-            context.l10n.onboardingAcademicSupportHighlight,
-        description:
-            context.l10n.onboardingAcademicSupportDescription,
+        highlightedWord: context.l10n.onboardingAcademicSupportHighlight,
+        description: context.l10n.onboardingAcademicSupportDescription,
       ),
     ];
   }
-
-
 
   void _onPageChanged(int index) {
     setState(() {
@@ -132,25 +101,17 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
     });
   }
 
-
-
-  void _nextPage(
-    List<OnboardingModel> items,
-  ) {
+  void _nextPage(List<OnboardingModel> items) {
     if (_currentPage == items.length - 1) {
       _navigateToLogin();
       return;
     }
 
     _pageController.nextPage(
-      duration: const Duration(
-        milliseconds: 300,
-      ),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
-
-  
 
   void _previousPage() {
     if (_currentPage == 0) {
@@ -158,24 +119,16 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
     }
 
     _pageController.previousPage(
-      duration: const Duration(
-        milliseconds: 300,
-      ),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
-
-
 
   void _skip() {
     _navigateToLogin();
   }
 
-
-
   void _navigateToLogin() {
-    context.pushNamedAndRemoveUntil(
-      AppRoutes.login,
-    );
+    context.pushNamedAndRemoveUntil(AppRoutes.login);
   }
 }

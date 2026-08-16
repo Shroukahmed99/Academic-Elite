@@ -1,4 +1,3 @@
-import 'package:academic_elite/core/extensions/localization_extension.dart';
 import 'package:academic_elite/core/extensions/theme_extension.dart';
 import 'package:academic_elite/core/utils/app_sizes.dart';
 import 'package:academic_elite/core/utils/colors_manager.dart';
@@ -26,25 +25,12 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppSizes.init(context);
-
     return SizedBox(
       height: AppSizes.h(_height),
       width: double.infinity,
       child: Stack(
         children: [
           _buildBackground(),
-
-          if (showBackButton || leading != null)
-            PositionedDirectional(
-              start: AppSizes.w(_contentHorizontalPadding),
-              top: AppSizes.h(48),
-              child: SizedBox(
-                width: AppSizes.w(_buttonSize),
-                height: AppSizes.h(_buttonSize),
-                child: leading ?? _BackButton(onPressed: onBackPressed),
-              ),
-            ),
 
           if (title.isNotEmpty)
             Positioned(
@@ -57,8 +43,8 @@ class CustomAppBar extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  style: context.textTheme.titleMedium?.copyWith(
-                    color: ColorsManager.white,
+                  style: context.textTheme.labelLarge?.copyWith(
+                    fontSize: AppSizes.sp(18),
                   ),
                 ),
               ),
@@ -69,6 +55,17 @@ class CustomAppBar extends StatelessWidget {
               end: AppSizes.w(_contentHorizontalPadding),
               top: AppSizes.h(48),
               child: Row(mainAxisSize: MainAxisSize.min, children: actions!),
+            ),
+
+          if (showBackButton || leading != null)
+            PositionedDirectional(
+              end: AppSizes.w(_contentHorizontalPadding),
+              top: AppSizes.h(48),
+              child: SizedBox(
+                width: AppSizes.w(_buttonSize),
+                height: AppSizes.h(_buttonSize),
+                child: leading ?? _BackButton(onPressed: onBackPressed),
+              ),
             ),
         ],
       ),
@@ -108,8 +105,8 @@ class _BackButton extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: Icon(
-            context.isArabic ? Icons.chevron_left : Icons.chevron_right,
-            size: AppSizes.sp(22),
+            Icons.chevron_right,
+            size: AppSizes.sp(27),
             color: ColorsManager.white,
           ),
         ),

@@ -70,9 +70,8 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
               width: double.infinity,
               height: AppSizes.h(50),
               decoration: BoxDecoration(
-                color: ColorsManager.font6,
+                color: ColorsManager.background,
                 borderRadius: BorderRadius.circular(AppSizes.r(16)),
-
                 border: Border.all(
                   color: field.hasError
                       ? ColorsManager.red
@@ -80,50 +79,57 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                   width: AppSizes.w(1.5),
                 ),
               ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppSizes.w(12)),
-                    child: Icon(
-                      Icons.phone_outlined,
-                      size: AppSizes.sp(19),
-                      color: ColorsManager.primary,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: widget.controller,
-                      keyboardType: TextInputType.phone,
-                      textInputAction: TextInputAction.next,
-                      textAlign: TextAlign.right,
-                      style: context.textTheme.bodyMedium!.copyWith(
-                        color: ColorsManager.font2,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: context.l10n.phoneHint,
-                        hintStyle: context.textTheme.bodyMedium!.copyWith(
+
+              // بنثبت ترتيب عناصر الـ Phone Field
+              // بحيث يفضل:
+              // Phone Icon -> Number -> Country
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Row(
+                  children: [
+                    _buildPhoneIcon(),
+
+                    Expanded(
+                      child: TextField(
+                        controller: widget.controller,
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.next,
+
+                        // الرقم يبدأ من ناحية أيقونة الهاتف
+                        textAlign: TextAlign.left,
+
+                        style: context.textTheme.bodyMedium!.copyWith(
                           color: ColorsManager.font2,
                           fontWeight: FontWeight.w400,
                         ),
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        focusedErrorBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.w(12),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        field.didChange(value);
-                      },
-                    ),
-                  ),
 
-                  _buildDivider(),
-                  _buildCountrySelector(context),
-                ],
+                        decoration: InputDecoration(
+                          hintText: context.l10n.phoneHint,
+                          hintStyle: context.textTheme.bodyMedium!.copyWith(
+                            color: ColorsManager.font2,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: AppSizes.w(12),
+                          ),
+                        ),
+
+                        onChanged: (value) {
+                          field.didChange(value);
+                        },
+                      ),
+                    ),
+
+                    _buildDivider(),
+
+                    _buildCountrySelector(context),
+                  ],
+                ),
               ),
             ),
 
@@ -143,6 +149,17 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildPhoneIcon() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppSizes.w(12)),
+      child: Icon(
+        Icons.phone_outlined,
+        size: AppSizes.sp(19),
+        color: ColorsManager.primary,
+      ),
     );
   }
 
@@ -195,8 +212,8 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           children: [
             SvgPicture.asset(
               _selectedCountry.flag,
-              width: AppSizes.w(24),
-              height: AppSizes.h(24),
+              width: AppSizes.w(20),
+              height: AppSizes.h(20),
             ),
 
             SizedBox(width: AppSizes.w(7)),
@@ -224,8 +241,10 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
     switch (country) {
       case 'jordan':
         return context.l10n.jordan;
+
       case 'england':
         return context.l10n.england;
+
       default:
         return country;
     }

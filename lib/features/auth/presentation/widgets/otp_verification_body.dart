@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:academic_elite/config/routes/app_routes.dart';
 import 'package:academic_elite/core/components/custom_app_bar.dart';
 import 'package:academic_elite/core/components/custom_button.dart';
@@ -18,7 +20,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OtpVerificationBody extends StatefulWidget {
-  const OtpVerificationBody({super.key, required this.email});
+  const OtpVerificationBody({
+    super.key,
+    required this.email,
+  });
 
   final String email;
 
@@ -30,17 +35,30 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
 
+  Timer? _resendTimer;
+  int _remainingSeconds = 60;
+
   @override
   void initState() {
     super.initState();
 
-    _controllers = List.generate(6, (_) => TextEditingController());
+    _controllers = List.generate(
+      6,
+      (_) => TextEditingController(),
+    );
 
-    _focusNodes = List.generate(6, (_) => FocusNode());
+    _focusNodes = List.generate(
+      6,
+      (_) => FocusNode(),
+    );
+
+    _startResendTimer();
   }
 
   @override
   void dispose() {
+    _resendTimer?.cancel();
+
     for (final controller in _controllers) {
       controller.dispose();
     }
@@ -52,12 +70,35 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     super.dispose();
   }
 
+  void _startResendTimer() {
+    _resendTimer?.cancel();
+
+    setState(() {
+      _remainingSeconds = 44;
+    });
+
+    _resendTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (_remainingSeconds > 0) {
+          setState(() {
+            _remainingSeconds--;
+          });
+        } else {
+          timer.cancel();
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     AppSizes.init(context);
 
     return CurvedPageLayout(
-      bodyPadding: EdgeInsets.symmetric(horizontal: AppSizes.p16),
+      bodyPadding: EdgeInsets.symmetric(
+        horizontal: AppSizes.p16,
+      ),
       header: CustomAppBar(
         title: context.l10n.otpVerification,
         showBackButton: true,
@@ -117,7 +158,10 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     return SizedBox(
       width: AppSizes.w(110),
       height: AppSizes.h(110),
-      child: SvgPicture.asset(AssetsManager.emailImage, fit: BoxFit.contain),
+      child: SvgPicture.asset(
+        AssetsManager.emailImage,
+        fit: BoxFit.contain,
+      ),
     );
   }
 
@@ -138,10 +182,14 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomText(text: widget.email, style: context.textTheme.bodyLarge),
+        CustomText(
+          text: widget.email,
+          style: context.textTheme.bodyLarge,
+        ),
         SizedBox(width: AppSizes.w(8)),
-
-        SvgPicture.asset(AssetsManager.editIcon),
+        SvgPicture.asset(
+          AssetsManager.editIcon,
+        ),
       ],
     );
   }
@@ -159,12 +207,18 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
       textDirection: TextDirection.ltr,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(6, (index) => _buildOtpField(context, index)),
+        children: List.generate(
+          6,
+          (index) => _buildOtpField(context, index),
+        ),
       ),
     );
   }
 
-  Widget _buildOtpField(BuildContext context, int index) {
+  Widget _buildOtpField(
+    BuildContext context,
+    int index,
+  ) {
     return SizedBox(
       width: AppSizes.w(48),
       height: AppSizes.h(52),
@@ -179,21 +233,23 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
           counterText: '',
           filled: true,
           fillColor: ColorsManager.font6,
-
           contentPadding: EdgeInsets.zero,
-
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSizes.r(12)),
+            borderRadius: BorderRadius.circular(
+              AppSizes.r(12),
+            ),
             borderSide: BorderSide.none,
           ),
-
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSizes.r(12)),
+            borderRadius: BorderRadius.circular(
+              AppSizes.r(12),
+            ),
             borderSide: BorderSide.none,
           ),
-
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSizes.r(12)),
+            borderRadius: BorderRadius.circular(
+              AppSizes.r(12),
+            ),
             borderSide: BorderSide(
               color: ColorsManager.primary,
               width: AppSizes.w(1),
@@ -219,7 +275,9 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
         return CustomButton(
           text: context.l10n.verify,
           suffixIcon: Icon(
-            context.isArabic ? Icons.arrow_forward : Icons.arrow_back,
+            context.isArabic
+                ? Icons.arrow_forward
+                : Icons.arrow_back,
             color: ColorsManager.white,
             size: AppSizes.sp(20),
           ),
@@ -236,19 +294,38 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
   }
 
   Widget _buildResendButton(BuildContext context) {
+    final bool canResend = _remainingSeconds == 0;
+
     return InkWell(
-      onTap: () {
-        context.read<OtpVerificationCubit>().resendOtp(email: widget.email);
-      },
-      borderRadius: BorderRadius.circular(AppSizes.r(24)),
+      onTap: canResend
+          ? () {
+              context
+                  .read<OtpVerificationCubit>()
+                  .resendOtp(
+                    email: widget.email,
+                  );
+
+              _startResendTimer();
+            }
+          : null,
+      borderRadius: BorderRadius.circular(
+        AppSizes.r(24),
+      ),
       child: Container(
         width: double.infinity,
         height: AppSizes.h(50),
-        padding: EdgeInsets.symmetric(horizontal: AppSizes.p16),
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSizes.p16,
+        ),
         decoration: BoxDecoration(
           color: ColorsManager.background,
-          borderRadius: BorderRadius.circular(AppSizes.r(24)),
-          border: Border.all(color: ColorsManager.font4, width: AppSizes.w(1)),
+          borderRadius: BorderRadius.circular(
+            AppSizes.r(24),
+          ),
+          border: Border.all(
+            color: ColorsManager.font4,
+            width: AppSizes.w(1),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -265,12 +342,16 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
               ),
               alignment: Alignment.center,
               child: CustomText(
-                text: '44',
+                text: '$_remainingSeconds',
                 style: context.textTheme.labelMedium!.copyWith(
                   fontSize: AppSizes.sp(12),
+                  color: canResend
+                      ? ColorsManager.primary
+                      : ColorsManager.font2,
                 ),
               ),
             ),
+
             SizedBox(width: AppSizes.w(8)),
 
             CustomText(
@@ -285,6 +366,9 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
               style: context.textTheme.labelMedium!.copyWith(
                 decoration: TextDecoration.underline,
                 decorationColor: ColorsManager.primary,
+                color: canResend
+                    ? ColorsManager.primary
+                    : ColorsManager.font4,
               ),
             ),
           ],
@@ -294,32 +378,51 @@ class _OtpVerificationBodyState extends State<OtpVerificationBody> {
   }
 
   void _verifyOtp() {
-    final otp = _controllers.map((controller) => controller.text).join();
+    final otp = _controllers
+        .map((controller) => controller.text)
+        .join();
 
     if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.enterCompleteVerificationCode)),
+        SnackBar(
+          content: Text(
+            context.l10n.enterCompleteVerificationCode,
+          ),
+        ),
       );
 
       return;
     }
 
     context.read<OtpVerificationCubit>().verifyOtp(
-      email: widget.email,
-      otp: otp,
-    );
+          email: widget.email,
+          otp: otp,
+        );
   }
 
-  void _handleState(BuildContext context, OtpVerificationState state) {
+  void _handleState(
+    BuildContext context,
+    OtpVerificationState state,
+  ) {
     if (state is OtpVerificationSuccess) {
-      context.pushNamed(AppRoutes.createNewPassword, arguments: widget.email);
+      context.pushNamed(
+        AppRoutes.createNewPassword,
+        arguments: widget.email,
+      );
 
       return;
     }
 
     if (state is OtpVerificationError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(mapFailureToMessage(context, state.failure))),
+        SnackBar(
+          content: Text(
+            mapFailureToMessage(
+              context,
+              state.failure,
+            ),
+          ),
+        ),
       );
     }
   }

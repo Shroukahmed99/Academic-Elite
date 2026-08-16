@@ -30,10 +30,10 @@ class OnboardingNavigation extends StatelessWidget {
               height: 50,
               borderRadius: 24,
               textStyle: context.textTheme.labelLarge!,
-              suffixIcon: Icon(
-                context.isArabic ? Icons.arrow_forward : Icons.arrow_back,
+              suffixIcon: const Icon(
+                Icons.arrow_forward,
                 color: ColorsManager.white,
-                size: AppSizes.sp(20),
+                size: 20,
               ),
             ),
           ),
